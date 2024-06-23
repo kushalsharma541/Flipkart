@@ -17,6 +17,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import java.util.concurrent.TimeUnit;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,6 +45,7 @@ public class TestCases {
     // popularity and print the count of items with rating less than or equal to 4
     // stars.
 
+    @SuppressWarnings("deprecation")
     @Test(enabled = true, alwaysRun = true)
     public static void testCase01() throws InterruptedException {
         System.out.println("Start the testcase01");
@@ -52,11 +54,17 @@ public class TestCases {
         WebElement searchElement = driver
                 .findElement(By.xpath("//input[@title ='Search for Products, Brands and More']"));
         // searchElement.sendKeys("Washing Machine");
+
+        Wait<WebDriver> webdwait1 = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        webdwait1.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@title ='Search for Products, Brands and More']")));
+
         Wrappers.wrapperSendKeys(searchElement, "Washing Machine");
         Thread.sleep(5000);
 
 
         Actions action = new Actions(driver);
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         action.sendKeys(searchElement, Keys.ENTER).perform();
 
         WebElement popularityElement = driver.findElement(By.xpath("//div[text() ='Popularity']")); //// div[@class='sHCOk2']//div[2]
@@ -112,13 +120,10 @@ public class TestCases {
 
         Actions action = new Actions(driver);
         action.sendKeys(searchElement, Keys.ENTER).perform();
+        Thread.sleep(5000);
 
         // Find all products
         List<WebElement> productElements = driver.findElements(By.xpath("//div[@class='tUxRFH']"));
-
-        Wait<WebDriver> webdwait1 = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        webdwait1.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='tUxRFH']")));
 
 
         // Create a HashMap to store title and discount
@@ -130,6 +135,7 @@ public class TestCases {
             // Extract title
             WebElement titleElement = productElement
                     .findElement(By.xpath(".//div[@class='col col-7-12']//div[@class='KzDlHZ']"));
+
             String title = titleElement.getText().trim();
 
             // Extract discount if available
@@ -233,6 +239,8 @@ public class TestCases {
         WebElement fourStarcheckboxElement = driver
                 .findElement(By.xpath("(//div[@class='XqNaEv'])[1]"));
 
+                Thread.sleep(3000);
+
         fourStarcheckboxElement.click();
 
         Thread.sleep(3000);
@@ -252,11 +260,13 @@ public class TestCases {
 
             // Extract title
             WebElement titleElement = productElement.findElement(By.xpath(".//a[@class='wjcEIp']"));
+            Thread.sleep(3000);
             String title = titleElement.getText().trim();
 
             // Extract image URL (you may need to adjust the XPath for actual
             // implementation)
             WebElement imageElement = productElement.findElement(By.xpath(".//img[@class='DByuf4']"));
+            Thread.sleep(2000);
             String imageUrl = imageElement.getAttribute("src");
 
             // Extract number of reviews
